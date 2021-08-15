@@ -1,0 +1,925 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript"></script>
+
+<script>
+		function callLogout() {
+		alert("Logout!");
+		location.href="/index";
+		}
+</script>
+
+
+
+	<script>
+    $(document).ready(function () {
+        alert("HI");
+        var logid = localStorage.getItem("loginok");
+        alert(logid);
+        if (logid == "" || logid === null) {
+            alert("Plz Login!");
+
+            location.replace("/index");
+        } else {
+        }
+		
+		
+
+        $(".addfav").click(function () {
+		var content = $(this).parent().find('label').text();
+		var content_item = '';
+		var content_item1 = '';
+		var mydata="login="+logid+"&favlist="+content;
+		
+		if( localStorage.getItem(logid) == null ) {
+			content_item = content_item + content;
+			//localStorage.setItem(logid, content_item);
+		}
+		else{
+			content_item1 = content_item + "," + content;
+			//localStorage.setItem(logid, content_item1);
+		}
+		
+
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://127.0.0.1:9999/favlist',
+                dataType: "text",
+                data: mydata,
+                success: function (data) {
+                    if (data == "Success") {
+                        alert("Added!");
+                        
+                        location.herf = "/favlist";
+
+                    }    
+                    else  {
+                        alert("Plz Login!");
+                        return;
+                    }
+
+
+
+                    alert(data);
+                    console.log('gogo');
+                    console.log(data);
+                },
+				
+				error: function(xhr, status, error) {
+                console.log('Error: ' + error.message);
+            }
+            });
+        });
+		
+		
+		});
+</script>
+
+
+	
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Sudio.Net</title>
+        <link rel="icon" type="image/x-icon" href="assets/1622034228.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+		
+	<meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		    <!-- Core Style CSS -->
+    <link rel="stylesheet" href="css/corestyle.css">
+	<link rel="stylesheet" href="css/owlcarousel.css">
+	<link rel="stylesheet" href="css/themifyicons.css">
+	<link rel="stylesheet" href="css/magnificpopup.css">
+      
+
+    <!-- Responsive CSS -->
+    <link href="css/responsive.css" rel="stylesheet">
+	
+    </head>
+	
+	<!--fast login css-->
+	<style>
+	
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 8px 25px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 0px;
+  right: 100px;
+  width: 200px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 101px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 290px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: orange;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+	</style>
+	
+
+	
+	<!--TEST API IN DATA-->
+	<!-- <div id = "apiresult"></div> -->
+	  
+  
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="footer bg-black small text-center text-white-50" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="#page-top">Studio.Net</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+					
+						<li class="nav-item"><a class="nav-link" href="#products">Products</a></li>
+       
+						<li class="nav-item"><a class="nav-link" href="/cart">Favorite</a></li>
+						
+						<li class="nav-item"><a class="nav-link" href="/userpage">Setting</a></li>
+						
+						<li class="nav-item"><a class="nav-link" href="javascript:void(0);" onclick="callLogout()" >Logout</a></li>
+								
+						
+                    </ul>
+                </div>
+            </div>
+        </nav>
+		
+				
+        <!-- arrival-->
+<!-- ****** Quick View Modal Area Start ****** -->
+	<section class="products-section bg-light" id="products">
+        <div class="modal fade" id="quickview1" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/05299bd/globalassets/inriver/resources/901163_a_profoto-b10-250-airttl-profile-right_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">Profoto B10</h4>
+
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+
+                                            <h5 class="price">$1790 USD <span>$2000 USD</span></h5>
+                                            <p>One of the biggest issues you'll have when shooting on location happens before you even arrive; How much gear to take. Too much and you're weighed down by lights and cables - take too little and you might not be able to deliver the images you'd hoped for.</p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist  -->
+                                            <div class="modal_pro_wishlist">
+                                                <!--<a id="mode1" target="_blank" onclick="addfav()"><i class="ti-heart" ></i></a>-->
+												<label hidden for="scales">Profoto B10</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button>
+												
+                                            </div>
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+		
+		        <div class="modal fade" id="quickview2" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/0526b42/globalassets/inriver/resources/901240_a_profoto-a10-profile-right.jpg?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">Profoto A10</h4>
+											<input type="hidden" id="name" value="Profoto A10">
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+											<input type="hidden" id="money" value="1095">
+                                            <h5 class="price">$1095 USD <span>$1200 USD</span></h5>
+                                            <p>The Profoto A10 has been upgraded with our new Bluetooth enabled technology AirX. Meaning that you can download new firmware for your A10 wirelessly via the Profoto app. But even better; You can both capture and control the A10 using your smartphone. So from now on you can unleash the full power of the A10 no matter what camera you use. Making Profoto A10 a truly future proof product.</p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+                                                <label hidden for="scales">Profoto A10</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button>
+                                            </div>
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+		
+		     <div class="modal fade" id="quickview3" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/0529ab2/globalassets/inriver/resources/901027-901028_a_profoto-b1x-500-airttl-profile-right_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">Profoto B1X</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$2490 USD <span>$2600 USD</span></h5>
+                                            <p>The Profoto B1X off-camera flash is the successor of the award winning Profoto B1. The B1X is no stay-at-home flash; it’s for the adventurous photographer who likes to get out there on location in the real world. </p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+											<label hidden for="scales">Profoto B1X</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button>
+                                                <!-- <a id="mode3" target="_blank"><i class="ti-heart"></i></a> -->
+                                            </div>  
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		
+			
+		     <div class="modal fade" id="quickview4" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/0529a93/globalassets/inriver/resources/101130_a_ocf_adapter.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">OCF Adapter</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$299 USD <span>$310 USD</span></h5>
+                                            <p>With the OCF Adapter you will have full creative flexibility with your Profoto A-series flash. The new adapter makes it possible for you to attach any of our wide range of OCF Light Shaping Tools, making it easy for you to shape the light in any way you desire. </p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+											<label hidden for="scales">OCF Adapter</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button>
+                                               <!-- <a id="mode4" target="_blank"><i class="ti-heart"></i></a>-->
+                                            </div> 
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+		
+		    <div class="modal fade" id="quickview5" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/053646c/globalassets/inriver/resources/020_grid-10_3840.png.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">OCF II Grids</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$69 USD <span>$75 USD</span></h5>
+                                            <p>The OCF II Grids reduce the light spread, control stray light, and add contrast and drama to an image. So no matter what location you find yourself in, you can control and focus the light where you want it, limit the light spillage on other areas of the image, create background effects, and more. </p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+											<label hidden for="scales">OCF II Grids</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button>
+                                               <!--   <a id="mode5" target="_blank"><i class="ti-heart"></i></a> -->
+                                            </div>    
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		
+		
+			<div class="modal fade" id="quickview6" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/05299bc/globalassets/inriver/resources/330241_a_profoto-core-backpack-s-front_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">Core BackPack S</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$269 USD <span>$300 USD</span></h5>
+                                            <p>The Profoto Core Backpack S is a sleek backpack designed by Profoto for the fast-moving photographer. It’s flexible, expandable and easily accessible with the modular organization to make it easy to bring your studio. </p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist  -->
+                                            <div class="modal_pro_wishlist">
+											
+											<label hidden for="scales">Core BackPack S</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button> 
+                                               <!-- <a id="mode6" target="_blank"><i class="ti-heart"></i></a>-->
+                                            </div>
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+   
+		
+		
+			<div class="modal fade" id="quickview7" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/0529b54/globalassets/inriver/resources/100397_a_profoto-li-ion-battery-for-a1-front_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">A-Series Battery Mk II</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$119 USD <span>$125 USD</span></h5>
+                                            <p>"Often when a photographer is right in the thick of the action, the last thing they need is performance fade or to have to stop mid flow to change the batteries.  </p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+											
+											<label hidden for="scales">A-Series Battery Mk II</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button> 
+                                              <!--  <a id="mode7" target="_blank"><i class="ti-heart"></i></a> -->
+                                            </div>  
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+		
+			
+						<div class="modal fade" id="quickview8" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/0525a63/globalassets/inriver/resources/901039_a_profoto-air-remote-ttl-c-front_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">Air Remote TTL</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$439 USD <span>$450 USD</span></h5>
+                                            <p>There’s no simpler way to get perfect exposure. Connect your Profoto AirTTL light to your camera wirelessly by attaching the remote to your camera’s hot shoe. Then, point and shoot in TTL mode, and the Air Remote TTL communicates with the flash. You get perfect exposure. Automatically.</p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+												<label hidden for="scales">Air Remote TTL</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button> 
+                                              <!--  <a id="mode7" target="_blank"><i class="ti-heart"></i></a> -->
+                                            </div>   
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+			<div class="modal fade" id="quickview9" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                    <div class="modal-body">
+                        <div class="quickview_body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-lg-5">
+                                        <div class="quickview_pro_img">
+                                            <img src="https://cdn.profoto.com/cdn/051a7f3/globalassets/inriver/resources/101301_a_profoto-clic-creative-gel-kit_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-7">
+                                        <div class="quickview_pro_des">
+                                            <h4 class="title">Profoto Clic Creative Gel Kit</h4>
+                                            <div class="top_seller_product_rating mb-15">
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" style="color:Orange;" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                            </div>
+                                            <h5 class="price">$129 USD <span>$135 USD</span></h5>
+                                            <p>Light shaping is the key to creating amazing images, and Profoto Clic light shaping tools provide many creative possibilities for the Profoto C1 Plus, A10, A1X and A1. Each light shaping tool has its own distinct effect on light. </p>
+                                           
+                                        </div>
+                                        <!-- Add to Cart Form -->
+                                        <form class="cart" method="post">
+                                    
+                                            <!-- Wishlist -->
+                                            <div class="modal_pro_wishlist">
+                                              <label hidden for="scales">Profoto Clic Creative Gel Kit</label><button class="addfav" ><img src="\Images\heart.png" width="35" height="35" ></button> 
+                                              <!--  <a id="mode7" target="_blank"><i class="ti-heart"></i></a> -->
+                                            </div>   
+
+                                        </form>
+
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+        <!-- ****** Quick View Modal Area End ****** -->
+
+        <!-- ****** New Arrivals Area Start ****** -->
+        <section class="new_arrivals_area section_padding_100_0 clearfix">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section_heading text-center">
+                            <h2>Products</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="karl-projects-menu mb-100">
+                <div class="text-center portfolio-menu">
+                    <button class="btn active" data-filter="*">ALL</button>
+                    <button class="btn" data-filter=".lights">LIGHTS</button>
+                    <button class="btn" data-filter=".lst">LIGHT SHAPING TOOLS</button>
+                    <button class="btn" data-filter=".access">ACCESSORIES</button>
+                    <button class="btn" data-filter=".aar">ALL AIR REMOTES</button>
+                    <button class="btn" data-filter=".sp">SAMRTPHONE PHOTOGRAPHY</button>
+					<!-- <button class="btn" data-filter=".fav">FAVORITE</button> -->
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row karl-new-arrivals">
+
+                    <!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item lights wow fadeInUpBig" data-wow-delay="0.2s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/05299bd/globalassets/inriver/resources/901163_a_profoto-b10-250-airttl-profile-right_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview1"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$1790 USD</h4>
+                            <p>Profoto B10</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+
+                    <!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item lights wow fadeInUpBig" data-wow-delay="0.3s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/0526b42/globalassets/inriver/resources/901240_a_profoto-a10-profile-right.jpg?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview2"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$1095 USD</h4>
+                            <p>Profoto A10</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+					
+					 <!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item lights wow fadeInUpBig" data-wow-delay="0.4s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/0529ab2/globalassets/inriver/resources/901027-901028_a_profoto-b1x-500-airttl-profile-right_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview3"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$2490 USD</h4>
+                            <p>Profoto B1X</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+					
+                    <!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item lst wow fadeInUpBig" data-wow-delay="0.5s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/0529a93/globalassets/inriver/resources/101130_a_ocf_adapter.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview4"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$299 USD</h4>
+                            <p>OCF Adapter</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+
+                    <!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item lst wow fadeInUpBig" data-wow-delay="0.6s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/053646c/globalassets/inriver/resources/020_grid-10_3840.png.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview5"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$69 USD</h4>
+                            <p>OCF II Grids 10°</p>
+                            <!-- Add to Cart -->
+                           
+                        </div>
+                    </div>
+
+                    <!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item access wow fadeInUpBig" data-wow-delay="0.7s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/05299bc/globalassets/inriver/resources/330241_a_profoto-core-backpack-s-front_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview6"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$269 USD</h4>
+                            <p>Core BackPack S</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+
+                    <!-- Single gallery Item -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item access wow fadeInUpBig" data-wow-delay="0.8s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/0529b54/globalassets/inriver/resources/100397_a_profoto-li-ion-battery-for-a1-front_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview7"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$119 USD</h4>
+                            <p>A-Series Battery Mk II</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+					
+					<!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item aar wow fadeInUpBig" data-wow-delay="0.9s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/0525a63/globalassets/inriver/resources/901039_a_profoto-air-remote-ttl-c-front_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview8"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$439 USD</h4>
+                            <p>Air Remote TTL</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+					
+					<!-- Single gallery Item Start -->
+                    <div class="col-12 col-sm-6 col-md-4 single_gallery_item fav sp wow fadeInUpBig" data-wow-delay="1.0s">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            <img src="https://cdn.profoto.com/cdn/051a7f3/globalassets/inriver/resources/101301_a_profoto-clic-creative-gel-kit_productimage.png?width=2840&quality=60&format=jpg" alt="">
+                            <div class="product-quicview">
+                                <a href="#" data-toggle="modal" data-target="#quickview9"><i ></i></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <h4 class="product-price">$129 USD</h4>
+                            <p>Profoto Clic Creative Gel Kit</p>
+                            <!-- Add to Cart -->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ****** New Arrivals Area End ****** -->
+		
+		
+		
+				
+        <!-- Footer-->
+        <footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; Your Website 2021</div></footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+		
+    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="js/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Plugins js -->
+    <script src="js/plugins.js"></script>
+    <!-- Active js -->
+    <script src="js/active.js"></script>
+	
+	 <!--   <script src="js/fetch.js"></script>
+	<script src="js/ui.js"></script>
+	<script src="js/app.js"></script>  -->
+	
+	
+	
+	
+    </body>
+</html>
